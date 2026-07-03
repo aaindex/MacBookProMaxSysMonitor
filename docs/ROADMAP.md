@@ -10,13 +10,15 @@
 
 - Add the working browser dashboard source. Done.
 - Add the Mac telemetry agent source. Done.
+- Add native Android WebView wrapper source. Done.
 - Document local development and install steps. Done.
 - Add screenshots of the running dashboard.
 
 ## Phase 3: First Usable Release
 
 - Provide a one-command Mac agent startup path.
-- Provide Samsung phone setup instructions.
+- Provide Samsung phone setup instructions. In progress.
+- Add a Gradle wrapper or documented Android Studio setup.
 - Add basic pairing or local access protection.
 - Add release artifacts and version tags.
 

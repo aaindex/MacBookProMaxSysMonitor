@@ -6,7 +6,7 @@ This project is intended for people who want a lightweight second-screen dashboa
 
 ## Project Status
 
-Working prototype. The current version runs a local Python server on the Mac and displays the dashboard in Samsung Internet through `adb reverse`.
+Working prototype. The current version runs a local Python server on the Mac and displays the dashboard in a native Android WebView app through `adb reverse`. Samsung Internet or Chrome can still be used as a fallback.
 
 ## Goals
 
@@ -19,6 +19,7 @@ Working prototype. The current version runs a local Python server on the Mac and
 ## Components
 
 - `mac-agent/` - macOS telemetry service that gathers system metrics.
+- `android-app/` - native Android wrapper app for the phone dashboard.
 - `docs/` - architecture, setup, release, and contributor documentation.
 - `.github/` - GitHub issue and pull request templates.
 
@@ -26,6 +27,8 @@ Working prototype. The current version runs a local Python server on the Mac and
 
 ```text
 MacBookProMaxSysMonitor/
+├── android-app/
+│   └── app/
 ├── mac-agent/
 │   ├── index.html
 │   └── mac_monitor_server.py
@@ -42,7 +45,17 @@ Requirements:
 - macOS.
 - Python 3.
 - Android Debug Bridge (`adb`).
+- Android Studio or Android SDK/Gradle to build the native app.
 - A Samsung phone with USB debugging enabled.
+
+Build and install the Android app:
+
+```bash
+cd android-app
+gradle assembleDebug
+adb install -r app/build/outputs/apk/debug/app-debug.apk
+cd ..
+```
 
 Start the Mac agent:
 
@@ -57,7 +70,9 @@ In another terminal, forward the phone's local port to the Mac agent:
 adb reverse tcp:8765 tcp:8765
 ```
 
-On the Samsung phone, open Samsung Internet or Chrome to:
+Open `Mac Monitor` on the Samsung phone.
+
+Browser fallback:
 
 ```text
 http://127.0.0.1:8765
@@ -78,7 +93,7 @@ The prototype currently shows:
 
 ## Security Model
 
-This project is designed for personal devices on a trusted local connection. The Mac agent binds to `127.0.0.1` by default and is intended to be reached from the phone through `adb reverse`.
+This project is designed for personal devices on a trusted local connection. The Mac agent binds to `127.0.0.1` by default and is intended to be reached from the Android app through `adb reverse`.
 
 Do not expose the unauthenticated telemetry endpoint to the public internet.
 

@@ -19,7 +19,9 @@ Current metrics:
 
 ### Android Dashboard
 
-The Samsung phone currently displays the dashboard in Samsung Internet or Chrome. The dashboard is a static HTML/CSS/JavaScript page served by the Mac agent and optimized for phone display.
+The Samsung phone runs a native Android app. The first app version is a small WebView wrapper around the static HTML/CSS/JavaScript dashboard served by the Mac agent.
+
+The WebView loads `http://127.0.0.1:8765` and blocks navigation away from localhost.
 
 ### Transport
 
@@ -29,7 +31,7 @@ The current transport is USB debugging with ADB port reverse:
 adb reverse tcp:8765 tcp:8765
 ```
 
-This lets the phone open `http://127.0.0.1:8765`, while the Mac agent remains bound to the Mac's loopback interface.
+This lets the Android app open `http://127.0.0.1:8765`, while the Mac agent remains bound to the Mac's loopback interface.
 
 ## Security Notes
 
@@ -38,5 +40,5 @@ The Mac agent defaults to `127.0.0.1`. Do not bind to public interfaces without 
 ## Data Flow
 
 ```text
-macOS system APIs/tools -> Python Mac agent -> ADB reverse -> Samsung browser dashboard
+macOS system APIs/tools -> Python Mac agent -> ADB reverse -> Android WebView dashboard
 ```
