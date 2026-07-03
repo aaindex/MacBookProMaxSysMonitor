@@ -1,0 +1,66 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs and temp files
+*.log
+tmp/
+temp/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.keystore
+*.jks
+
+# Python
+__pycache__/
+*.py[cod]
+.python-version
+.venv/
+venv/
+build/
+dist/
+*.egg-info/
+
+# Node / web tooling
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Android / Gradle
+.gradle/
+local.properties
+captures/
+*.apk
+*.ap_
+*.aab
+*.dex
+*.class
+android-app/build/
+android-app/.cxx/
+android-app/.externalNativeBuild/
+
+# Kotlin / Java
+out/
+
+# Xcode / Apple tooling
+DerivedData/
+*.xcuserstate
+xcuserdata/
+
+# Generated screenshots and captures
+screenshots/
+recordings/
