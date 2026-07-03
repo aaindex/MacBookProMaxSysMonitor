@@ -21,7 +21,7 @@ Include:
 
 ## Security Principles
 
-- Bind local telemetry services to trusted interfaces by default.
+- Bind local telemetry services to trusted interfaces by default. The current Mac agent binds to `127.0.0.1`.
 - Do not expose unauthenticated monitoring endpoints to the public internet.
 - Do not collect more system data than the dashboard needs.
 - Do not commit signing keys, tokens, passwords, or local device identifiers.

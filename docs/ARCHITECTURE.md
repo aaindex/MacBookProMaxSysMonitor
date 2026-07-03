@@ -1,41 +1,42 @@
 # Architecture
 
-MacBook Pro Max System Monitor is planned as a two-device local monitoring system.
+MacBook Pro Max System Monitor is a two-device local monitoring system.
 
 ## Components
 
 ### Mac Agent
 
-The Mac agent runs on macOS and collects telemetry from local system APIs and command-line tools. It should expose only the data needed by the phone dashboard.
+The Mac agent runs on macOS and collects telemetry from local system APIs and command-line tools. It exposes a minimal HTTP API and serves the phone dashboard.
 
-Candidate metrics:
+Current metrics:
 
 - CPU load and usage.
-- Memory pressure, used memory, and swap.
-- Battery percentage, charging state, and cycle health where available.
-- Thermal state.
+- Memory pressure and estimated used memory.
 - Disk capacity and available space.
-- Network throughput.
+- Network receive/send totals.
 - Top resource-consuming processes.
+- GPU model/status note.
 
 ### Android Dashboard
 
-The Samsung phone app displays live metrics from the Mac agent. It should be optimized for glanceable monitoring, persistent display, and fast reconnects.
+The Samsung phone currently displays the dashboard in Samsung Internet or Chrome. The dashboard is a static HTML/CSS/JavaScript page served by the Mac agent and optimized for phone display.
 
 ### Transport
 
-The project should support a trusted local connection. Possible transports include:
+The current transport is USB debugging with ADB port reverse:
 
-- Local Wi-Fi HTTP or WebSocket.
-- USB with ADB reverse during development.
-- A future authenticated local pairing flow.
+```bash
+adb reverse tcp:8765 tcp:8765
+```
+
+This lets the phone open `http://127.0.0.1:8765`, while the Mac agent remains bound to the Mac's loopback interface.
 
 ## Security Notes
 
-The Mac agent should default to local or trusted-network access. Do not bind to public interfaces without authentication.
+The Mac agent defaults to `127.0.0.1`. Do not bind to public interfaces without authentication.
 
 ## Data Flow
 
 ```text
-macOS system APIs/tools -> Mac agent -> local transport -> Samsung phone dashboard
+macOS system APIs/tools -> Python Mac agent -> ADB reverse -> Samsung browser dashboard
 ```
