@@ -112,3 +112,8 @@ Released under the [MIT License](LICENSE).
 ## Maintainer
 
 Created and maintained by [aaindex](https://github.com/aaindex).
+
+## Attribution
+
+All code in this repository was created by OpenAI Codex under the direction of
+[aaindex](https://github.com/aaindex), unless otherwise noted.
