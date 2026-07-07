@@ -11,6 +11,16 @@ This folder contains the working prototype:
 python3 mac_monitor_server.py
 ```
 
+For live Apple GPU percent/power, allow `powermetrics` before starting or while the
+server is running:
+
+```bash
+sudo -v
+```
+
+The server calls `sudo -n powermetrics --samplers gpu_power` and falls back to the
+GPU model/status note when macOS has not granted privilege.
+
 The server listens on:
 
 ```text

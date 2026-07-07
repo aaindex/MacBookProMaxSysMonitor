@@ -134,7 +134,7 @@
       $("diskText").textContent = `${m.disk.usedText} / ${m.disk.totalText}`;
       $("gpu").textContent = m.gpu.status;
       $("gpuModel").textContent = m.gpu.model;
-      $("gpuNote").textContent = m.gpu.note;
+      $("gpuNote").textContent = m.gpu.powerText ? `${m.gpu.powerText} · ${m.gpu.note}` : m.gpu.note;
       $("rx").textContent = m.network.rxText;
       $("tx").textContent = m.network.txText;
       $("top").innerHTML = m.cpu.top.map(p =>

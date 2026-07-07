@@ -89,7 +89,7 @@ The prototype currently shows:
 - Memory pressure and estimated used memory.
 - System volume disk usage.
 - Network receive/send totals.
-- Apple GPU model/status note.
+- Apple GPU model/status, with live GPU percent/power when macOS grants `powermetrics` permission.
 
 ## Security Model
 

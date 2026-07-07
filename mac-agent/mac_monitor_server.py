@@ -9,11 +9,24 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 START = time.time()
+GPU_SAMPLE = {"time": 0.0, "data": None}
 
 
 def run(cmd):
     try:
         return subprocess.check_output(cmd, text=True, stderr=subprocess.DEVNULL).strip()
+    except Exception:
+        return ""
+
+
+def run_with_timeout(cmd, timeout):
+    try:
+        return subprocess.check_output(
+            cmd,
+            text=True,
+            stderr=subprocess.DEVNULL,
+            timeout=timeout,
+        ).strip()
     except Exception:
         return ""
 
@@ -123,11 +136,50 @@ def gpu():
         if "Chipset Model:" in line:
             model = line.split(":", 1)[1].strip()
             break
-    return {
+    data = {
         "model": model,
         "status": "Active",
         "note": "Live GPU % needs privileged powermetrics on macOS.",
     }
+    power = gpu_power_metrics()
+    if power:
+        data.update(power)
+    return data
+
+
+def gpu_power_metrics():
+    now = time.time()
+    if GPU_SAMPLE["data"] is not None and now - GPU_SAMPLE["time"] < 8:
+        return GPU_SAMPLE["data"]
+
+    output = run_with_timeout(
+        ["sudo", "-n", "powermetrics", "--samplers", "gpu_power", "-i", "1000", "-n", "1"],
+        5,
+    )
+    parsed = parse_powermetrics_gpu(output) if output else None
+    GPU_SAMPLE["time"] = now
+    GPU_SAMPLE["data"] = parsed
+    return parsed
+
+
+def parse_powermetrics_gpu(output):
+    active_match = re.search(r"GPU(?:\s+HW)?\s+active\s+residency:\s*([0-9.]+)%", output, re.I)
+    power_match = re.search(r"GPU\s+Power:\s*([0-9.]+)\s*([mun]?W)", output, re.I)
+    if not active_match and not power_match:
+        return None
+
+    active = number(active_match.group(1)) if active_match else None
+    result = {
+        "status": f"{active:.1f}%" if active is not None else "Active",
+        "note": "Live GPU metrics from powermetrics.",
+    }
+    if active is not None:
+        result["percent"] = round(active, 1)
+    if power_match:
+        value = number(power_match.group(1))
+        unit = power_match.group(2)
+        result["powerText"] = f"{value:.0f} {unit}" if unit.lower() == "mw" else f"{value:.2f} {unit}"
+    return result
 
 
 def bytes_human(size):
